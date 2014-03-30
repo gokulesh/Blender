@@ -5,42 +5,37 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
-import org.blender.exception.BlendingException;
+import org.apache.commons.lang.StringUtils;
+import org.blender.exception.BlenderException;
 
 public class ConfigurationBuilder {
 
-    private final BlenderConfig blenderConfig;
-
-    public ConfigurationBuilder(){
-        blenderConfig = new BlenderConfig();
-    }
-
-    public ConfigurationBuilder withPropertyFile(String file) {
-        blenderConfig.addPropertyFiles(file);
-        return this;
-    }
-
-    public ConfigurationBuilder useSystemProperties(boolean useSystemProperties){
-        blenderConfig.setUseSystemProperties(useSystemProperties);
-        return this;
-    }
-
-    public ConfigurationBuilder withPrefix(String prefix){
-        blenderConfig.setPrefix(prefix);
-        return this;
-    }
-
-    public Configuration build() {
+    public Configuration createConfiguration(BlenderConfig blenderConfig) {
         CompositeConfiguration cc = new CompositeConfiguration();
+        addSystemConfiguration(blenderConfig, cc);
+        addAllPropertiesConfiguration(blenderConfig, cc);
+        return createSubsetConfigurationBasedOnPrefix(blenderConfig, cc);
+
+    }
+
+    private Configuration createSubsetConfigurationBasedOnPrefix(BlenderConfig blenderConfig, CompositeConfiguration compositeConfiguration) {
+        if(StringUtils.isNotBlank(blenderConfig.prefix())){
+            return compositeConfiguration.subset(blenderConfig.prefix());
+        }
+        return compositeConfiguration;
+    }
+
+    private void addSystemConfiguration(BlenderConfig blenderConfig, CompositeConfiguration cc) {
         if(blenderConfig.isUseSystemProperties()){
             cc.addConfiguration(new SystemConfiguration());
         }
+    }
 
+    private void addAllPropertiesConfiguration(BlenderConfig blenderConfig, CompositeConfiguration cc) {
         for(String file: blenderConfig.getPropertyFiles()){
             PropertiesConfiguration config = createPropertiesConfiguration(file);
             cc.addConfiguration(config);
         }
-        return cc;
     }
 
     private PropertiesConfiguration createPropertiesConfiguration(String file) {
@@ -48,9 +43,8 @@ public class ConfigurationBuilder {
         try {
             config = new PropertiesConfiguration(file);
         } catch (ConfigurationException e) {
-            throw new BlendingException(e);
+            throw new BlenderException(e);
         }
         return config;
     }
-
 }

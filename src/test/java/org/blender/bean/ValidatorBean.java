@@ -10,8 +10,6 @@ public class ValidatorBean {
     @NotEmpty
     private String name;
 
-    @Min(15)
-    @Max(25)
     private int value;
 
     public String getName() {
@@ -22,6 +20,8 @@ public class ValidatorBean {
         this.name = name;
     }
 
+    @Min(15)
+    @Max(25)
     public int getValue() {
         return value;
     }

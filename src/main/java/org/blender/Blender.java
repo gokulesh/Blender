@@ -1,9 +1,8 @@
 package org.blender;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.blender.exception.BlendingException;
+import org.apache.commons.configuration.Configuration;
+import org.blender.exception.BlenderException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -14,22 +13,18 @@ import java.util.Set;
 
 public class Blender {
 
-    private PropertiesConfiguration configuration;
+    private final ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+    private final Configuration configuration;
 
-    public Blender(PropertiesConfiguration configuration) {
-        this.configuration = configuration;
+    public Blender(BlenderConfig blenderConfig) {
+        configuration = configurationBuilder.createConfiguration(blenderConfig);
     }
 
-    public Blender() {
-        this.configuration = new PropertiesConfiguration();
+    public String valueOf(String property) {
+        return configuration.getString(property);
     }
 
-    public void read(String file) {
-        loadPropertiesFile(file);
-    }
-
-    public <T> void mix(T bean, String file) {
-        loadPropertiesFile(file);
+    public <T> void fill(T bean) {
         Iterator<String> keys = configuration.getKeys();
         while (keys.hasNext()) {
             String key = keys.next();
@@ -39,8 +34,20 @@ public class Blender {
         validate(bean);
     }
 
-    public String valueOf(String property) {
-        return configuration.getString(property);
+    public void dumpProperties(){
+        Iterator<String> keys = configuration.getKeys();
+        while(keys.hasNext()){
+            String key = keys.next();
+            System.out.println(key + ":" + configuration.getString(key) );
+        }
+    }
+
+    private <T> void fillBean(T bean, String key, String value) {
+        try {
+            BeanUtils.setProperty(bean, key, value);
+        } catch (ReflectiveOperationException e) {
+            throw new BlenderException(e);
+        }
     }
 
     private <T> void validate(T bean) {
@@ -51,31 +58,14 @@ public class Blender {
             return;
         }
         throwExceptionWithViolations(violations);
-
     }
 
     private <T> void throwExceptionWithViolations(Set<ConstraintViolation<T>> violations) {
         StringBuilder msg = new StringBuilder("");
         for (ConstraintViolation<T> violation : violations) {
-            msg.append(violation.getPropertyPath().toString() + "-" + violation.getMessage());
+            msg.append(violation.getPropertyPath().toString() + ": " + violation.getMessage());
         }
-
-        throw new BlendingException(msg.toString());
+        throw new BlenderException(msg.toString());
     }
 
-    private void loadPropertiesFile(String file) {
-        try {
-            configuration.load(file);
-        } catch (ConfigurationException e) {
-            throw new BlendingException(e);
-        }
-    }
-
-    private <T> void fillBean(T bean, String key, String value) {
-        try {
-            BeanUtils.setProperty(bean, key, value);
-        } catch (ReflectiveOperationException e) {
-            throw new BlendingException(e);
-        }
-    }
 }

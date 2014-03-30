@@ -1,17 +1,16 @@
 package org.blender.bean;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.Valid;
 
 public class Person {
 
-    @NotNull
+    @NotEmpty
     private String name;
 
-    @NotNull
-    @Min(30)
-    private int age;
-
+    @Valid
+    private Address address = new Address();
 
     public String getName() {
         return name;
@@ -21,11 +20,11 @@ public class Person {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
