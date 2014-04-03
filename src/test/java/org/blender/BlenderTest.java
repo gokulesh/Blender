@@ -128,4 +128,14 @@ public class BlenderTest {
         blender.dumpProperties();
     }
 
+    @Test
+    public void shouldIncludeNestedPropertyFileConfig() {
+        BlenderConfig includePropertiesConfig = new BlenderConfig.Builder().ignoreSystemProperties().
+                withPropertyFiles("main.properties").build();
+        blender = new Blender(includePropertiesConfig);
+        assertThat(blender.valueOf("main.name")).isEqualTo("main name");
+        assertThat(blender.valueOf("inc1.name")).isEqualTo("inc1 name");
+    }
+
+
 }
