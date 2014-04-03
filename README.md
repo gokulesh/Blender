@@ -4,9 +4,9 @@ Blender
 Blender is used to merge properties from the property files and/or system properties and provide the correct override semantics. It can also be used to serialize java beans from these properties and optionally validate them.
 Property names specified in the System properties override the properties specified in the property files.
 
-Properties are read using the commons-configuration library.
-Beans are serialized using the commons-beanutils library.
-Validation is done using hibernate validator library.
+* Properties are read using the commons-configuration library.
+* Beans are serialized using the commons-beanutils library.
+* Validation is done using hibernate validator library.
 
 ### Usage
 First create the Blender config with the list of property files that needs to be processed. If system properties needs to be accessible, then add that to the configuration. By default, it is not added :
@@ -15,8 +15,8 @@ First create the Blender config with the list of property files that needs to be
 
 
 Here PROPERTIES_FILE_1 has the following properties:
-    name=name1
-    value=value1
+    `name=name1`
+    `value=value1`
 
 Then create the Blender object using the above config :
 
