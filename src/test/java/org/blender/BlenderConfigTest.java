@@ -15,7 +15,7 @@ public class BlenderConfigTest {
 
     @Test
     public void shouldSetUseSystemproperties(){
-        BlenderConfig config = new BlenderConfig.Builder().useSystemProperties(true).build();
+        BlenderConfig config = new BlenderConfig.Builder().useSystemProperties().build();
         assertThat(config.isUseSystemProperties()).isTrue();
     }
 

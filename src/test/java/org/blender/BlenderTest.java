@@ -77,7 +77,7 @@ public class BlenderTest {
 
     @Test
     public void shouldReadFromSystemProperties() {
-        BlenderConfig systemPropertiesConfig = new BlenderConfig.Builder().useSystemProperties(true).build();
+        BlenderConfig systemPropertiesConfig = new BlenderConfig.Builder().useSystemProperties().build();
         blender = new Blender(systemPropertiesConfig);
         assertThat(blender.valueOf(SYSTEM_KEY)).isEqualTo(SYSTEM_VALUE);
     }
@@ -109,7 +109,7 @@ public class BlenderTest {
     @Test
     public void shouldOverrideBasedOnSystemProperties() {
         System.setProperty("name",SYSTEM_VALUE);
-        BlenderConfig overridePropertiesConfig = new BlenderConfig.Builder().useSystemProperties(true).
+        BlenderConfig overridePropertiesConfig = new BlenderConfig.Builder().useSystemProperties().
                 withPropertyFiles("override.properties", "simple.properties").build();
         blender = new Blender(overridePropertiesConfig);
 
@@ -122,7 +122,7 @@ public class BlenderTest {
 
     @Test
     public void shouldDumpPropertiesToConsole() {
-        BlenderConfig overridePropertiesConfig = new BlenderConfig.Builder().useSystemProperties(false).
+        BlenderConfig overridePropertiesConfig = new BlenderConfig.Builder().ignoreSystemProperties().
                 withPropertyFiles("override.properties", "simple.properties").build();
         blender = new Blender(overridePropertiesConfig);
         blender.dumpProperties();

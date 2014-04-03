@@ -20,7 +20,7 @@ public class ConfigurationBuilderTest {
 
     @Test
     public void shouldAddSystemConfiguration(){
-        BlenderConfig config = new BlenderConfig.Builder().useSystemProperties(true).build();
+        BlenderConfig config = new BlenderConfig.Builder().useSystemProperties().build();
         CompositeConfiguration compositeConfig= (CompositeConfiguration)builder.createConfiguration(config);
         assertThat(compositeConfig.getConfiguration(0)).isInstanceOf(SystemConfiguration.class);
     }

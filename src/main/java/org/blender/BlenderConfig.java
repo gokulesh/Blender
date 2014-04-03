@@ -32,8 +32,13 @@ public class BlenderConfig
             return this;
         }
 
-        public Builder useSystemProperties(boolean useSystemProperties){
-            config.useSystemProperties = useSystemProperties;
+        public Builder useSystemProperties(){
+            config.useSystemProperties = true;
+            return this;
+        }
+
+        public Builder ignoreSystemProperties(){
+            config.useSystemProperties = false;
             return this;
         }
 
