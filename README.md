@@ -1,7 +1,8 @@
 Blender
 =======
 
-Blender is used to merge properties from the property files and/or system properties and provide the correct value. It can also be used to serialize java beans from these properties and optionally validate them.
+Blender is used to merge properties from the property files and/or system properties and provide the correct override semantics. It can also be used to serialize java beans from these properties and optionally validate them.
+Property names specified in the System properties override the properties specified in the property files.
 
 Properties are read using the commons-configuration library.
 Beans are serialized using the commons-beanutils library.
