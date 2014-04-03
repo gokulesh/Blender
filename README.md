@@ -35,7 +35,6 @@ To serialize properties to a bean
         //add getters and setters
     }
 
-
     SimpleBean bean = new SimpleBean()
     blender.fill(bean)
 
@@ -49,7 +48,7 @@ To validate the bean, add the hibernate validator annotations as specified in [h
         @NotEmpty
         private String name;
 
-        @NotEMpty
+        @NotEmpty
         @Size(min = 5, max = 14)
         private String value;
 
@@ -75,3 +74,5 @@ Blender can be configured to read only properties that have a specific prefix.
 Properties prefixed with "org.blender" will be filtered and the prefix will be removed. If properties are to be serialized to a bean, then
 they will be done without the prefix.
 
+
+### Have a look at BlenderTest for examples
