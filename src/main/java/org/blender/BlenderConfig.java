@@ -1,9 +1,9 @@
 package org.blender;
 
+import static java.util.Collections.addAll;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Collections.addAll;
 
 public class BlenderConfig
 {
@@ -24,7 +24,7 @@ public class BlenderConfig
     }
 
 
-    static class Builder {
+    public static class Builder {
         private BlenderConfig config = new BlenderConfig();
 
         public Builder withPropertyFiles(String... files) {
